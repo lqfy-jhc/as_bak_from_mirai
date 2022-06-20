@@ -16,117 +16,82 @@ import net.mamoe.mirai.data.StrangerInfo
 import net.mamoe.mirai.data.UserInfo
 import net.mamoe.mirai.utils.currentTimeSeconds
 
-@DslMarker
-private annotation class MockUserInfoDSL
-
-@MockUserInfoDSL
 public interface MockUserInfoBuilder {
-    @MockUserInfoDSL
     public fun uin(value: Long): MockUserInfoBuilder
 
-    @MockUserInfoDSL
     public fun nick(value: String): MockUserInfoBuilder
 
-    @MockUserInfoDSL
     public fun remark(value: String): MockUserInfoBuilder
 
-    @MockUserInfoDSL
     public fun build(): UserInfo
 
     public companion object {
         @JvmStatic
         @JvmName("builder")
-        @MockUserInfoDSL
         public operator fun invoke(): MockUserInfoBuilder = ThreeInOneInfoBuilder()
     }
 }
 
-@MockUserInfoDSL
 public interface MockFriendInfoBuilder : MockUserInfoBuilder {
-    @MockUserInfoDSL
     public override fun build(): FriendInfo
 
-    @MockUserInfoDSL
     override fun uin(value: Long): MockFriendInfoBuilder
 
-    @MockUserInfoDSL
     override fun nick(value: String): MockFriendInfoBuilder
 
-    @MockUserInfoDSL
     override fun remark(value: String): MockFriendInfoBuilder
 
     public companion object {
         @JvmStatic
         @JvmName("builder")
-        @MockUserInfoDSL
         public operator fun invoke(): MockFriendInfoBuilder = ThreeInOneInfoBuilder()
     }
 }
 
-@MockUserInfoDSL
 public interface MockMemberInfoBuilder : MockUserInfoBuilder {
-    @MockUserInfoDSL
     override fun build(): MemberInfo
 
-    @MockUserInfoDSL
     public fun nameCard(value: String): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     public fun specialTitle(value: String): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     public fun anonymousId(value: String?): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     public fun joinTimestamp(value: Int): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     public fun lastSpeakTimestamp(value: Int): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     public fun isOfficialBot(value: Boolean): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     public fun permission(value: MemberPermission): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     override fun uin(value: Long): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     override fun nick(value: String): MockMemberInfoBuilder
 
-    @MockUserInfoDSL
     override fun remark(value: String): MockMemberInfoBuilder
 
     public companion object {
         @JvmStatic
         @JvmName("builder")
-        @MockUserInfoDSL
         public operator fun invoke(): MockMemberInfoBuilder = ThreeInOneInfoBuilder()
     }
 }
 
-@MockUserInfoDSL
 public interface MockStrangerInfoBuilder : MockUserInfoBuilder {
-    @MockUserInfoDSL
     public fun fromGroup(value: Long): MockUserInfoBuilder
 
-    @MockUserInfoDSL
     override fun uin(value: Long): MockUserInfoBuilder
 
-    @MockUserInfoDSL
     override fun nick(value: String): MockUserInfoBuilder
 
-    @MockUserInfoDSL
     override fun remark(value: String): MockUserInfoBuilder
 
-    @MockUserInfoDSL
     override fun build(): StrangerInfo
 
     public companion object {
         @JvmStatic
         @JvmName("builder")
-        @MockUserInfoDSL
         public operator fun invoke(): MockUserInfoBuilder = ThreeInOneInfoBuilder()
     }
 }

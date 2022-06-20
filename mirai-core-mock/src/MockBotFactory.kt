@@ -21,37 +21,26 @@ import net.mamoe.mirai.utils.BotConfiguration
 
 public interface MockBotFactory : BotFactory {
 
-    @MockBotDSL
     public interface BotBuilder {
-        @MockBotDSL
         public fun id(value: Long): BotBuilder
 
-        @MockBotDSL
         public fun nick(value: String): BotBuilder
 
-        @MockBotDSL
         public fun configuration(value: BotConfiguration): BotBuilder
 
-        @MockBotDSL
         public fun nameGenerator(value: NameGenerator): BotBuilder
 
-        @MockBotDSL
         public fun tmpResourceServer(server: TmpResourceServer): BotBuilder
 
-        @MockBotDSL
         public fun msgDatabase(db: MessageDatabase): BotBuilder
 
-        @MockBotDSL
         public fun userProfileService(service: UserProfileService): BotBuilder
 
-        @MockBotDSL
         public fun create(): MockBot
 
-        @MockBotDSL
         public fun createNoInstanceRegister(): MockBot
     }
 
-    @MockBotDSL
     public fun newMockBotBuilder(): BotBuilder
 
     @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
@@ -68,7 +57,6 @@ public interface MockBotFactory : BotFactory {
     }
 }
 
-@MockBotDSL
 public inline fun MockBotFactory.BotBuilder.configuration(
     block: BotConfiguration.() -> Unit
 ): MockBotFactory.BotBuilder = configuration(BotConfiguration(block))

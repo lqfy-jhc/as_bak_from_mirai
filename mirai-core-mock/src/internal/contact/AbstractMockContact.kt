@@ -15,7 +15,6 @@ import net.mamoe.mirai.contact.Contact
 import net.mamoe.mirai.event.events.MessagePreSendEvent
 import net.mamoe.mirai.internal.contact.broadcastMessagePreSendEvent
 import net.mamoe.mirai.internal.contact.replaceMagicCodes
-import net.mamoe.mirai.internal.contact.sendMessageImpl
 import net.mamoe.mirai.message.MessageReceipt
 import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.Message

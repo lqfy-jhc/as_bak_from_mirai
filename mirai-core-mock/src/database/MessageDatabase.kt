@@ -83,16 +83,16 @@ public data class MessageInfo(
     // ids
     public val id1: Int get() = (msgId shr 32).toInt()
 
-    // internalId
-    public val id2: Int get() = msgId.toInt()
+    // internalIds
+    public val internal2: Int get() = msgId.toInt()
 }
 
-public fun mockMsgDatabaseId(id1: Int, id2: Int): Long {
-    return (id1.toLongUnsigned() shl Int.SIZE_BITS) or (id2.toLongUnsigned())
+public fun mockMsgDatabaseId(id: Int, internalId: Int): Long {
+    return (id.toLongUnsigned() shl Int.SIZE_BITS) or (internalId.toLongUnsigned())
 }
 
-public fun MessageDatabase.removeMessageInfo(id1: Int, id2: Int) {
-    removeMessageInfo(mockMsgDatabaseId(id1, id2))
+public fun MessageDatabase.removeMessageInfo(id: Int, internalId: Int) {
+    removeMessageInfo(mockMsgDatabaseId(id, internalId))
 }
 
 public fun MessageDatabase.queryMessageInfo(ids: IntArray, internalIds: IntArray): MessageInfo? {

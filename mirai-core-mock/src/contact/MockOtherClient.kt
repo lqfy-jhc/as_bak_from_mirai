@@ -11,4 +11,4 @@ package net.mamoe.mirai.mock.contact
 
 import net.mamoe.mirai.contact.OtherClient
 
-public interface MockOtherClient: OtherClient, MockContact
+public interface MockOtherClient : OtherClient, MockContact

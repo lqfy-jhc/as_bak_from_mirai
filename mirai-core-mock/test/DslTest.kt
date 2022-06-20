@@ -17,11 +17,9 @@ import net.mamoe.mirai.mock.utils.MockActions.nameCardChangesTo
 import net.mamoe.mirai.mock.utils.MockActions.nudged
 import net.mamoe.mirai.mock.utils.MockActions.nudgedBy
 import net.mamoe.mirai.mock.utils.MockActions.permissionChangesTo
-import net.mamoe.mirai.mock.utils.MockActions.sayMessage
+import net.mamoe.mirai.mock.utils.MockActions.saysMessage
 import net.mamoe.mirai.mock.utils.MockActions.says
 import net.mamoe.mirai.mock.utils.MockActions.specialTitleChangesTo
-import net.mamoe.mirai.mock.utils.group
-import net.mamoe.mirai.mock.utils.member
 import net.mamoe.mirai.mock.utils.mockUploadAsOnlineAudio
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import java.io.File
@@ -43,40 +41,40 @@ internal suspend fun dslTest() {
     }
 
     // 群成员 70 说了一句话
-    bot.group(50).member(70) says "0"
-    bot.group(1).member(1) sayMessage {
+    bot.getGroupOrFail(50).getOrFail(70).says("0")
+    bot.getGroupOrFail(1).getOrFail(1).saysMessage {
         File("helloworld.amr").toExternalResource().toAutoCloseable().mockUploadAsOnlineAudio(bot)
     }
 
     // 50 拍了拍 bot 的 sys32
-    bot.group(5).member(50).nudged(bot) {
+    bot.getGroupOrFail(5).getOrFail(50).nudged(bot) {
         action("拍了拍")
         suffix("sys32")
     }
 
     // 1 拍了拍 bot 的 sys32
-    bot.nudgedBy(bot.group(1).member(1)) {
+    bot.nudgedBy(bot.getGroupOrFail(1).getOrFail(1)) {
         action("拍了拍")
         suffix("sys32")
     }
 
     // 新的入群申请
-    bot.group(50).broadcastNewMemberJoinRequestEvent(
+    bot.getGroupOrFail(50).broadcastNewMemberJoinRequestEvent(
         requester = 3,
         requesterName = "Him188moe",
         message = "Hi!",
     ).reject(message = "Hello!")
 
     // 群成员 2 修改了群名片
-    bot.group(1).member(2) nameCardChangesTo "Test"
+    bot.getGroupOrFail(1).getOrFail(2) nameCardChangesTo "Test"
     // 群成员 2 被群主修改了头衔
-    bot.group(1).member(2) specialTitleChangesTo "管埋员"
+    bot.getGroupOrFail(1).getOrFail(2) specialTitleChangesTo "管埋员"
     // 群主修改了群成员 2 的权限为 Administrator
-    bot.group(1).member(2) permissionChangesTo MemberPermission.ADMINISTRATOR
+    bot.getGroupOrFail(1).getOrFail(2) permissionChangesTo MemberPermission.ADMINISTRATOR
 
     // 群主撤回了一条群员消息
-    bot.group(1).owner.recallMessage(
-        bot.group(1).member(1) says { append("SB") }
+    bot.getGroupOrFail(1).owner.recallMessage(
+        bot.getGroupOrFail(1).getOrFail(1) says { append("SB") }
     )
 
     // 新的好友申请

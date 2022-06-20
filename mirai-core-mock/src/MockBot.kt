@@ -22,7 +22,6 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.OnlineAudio
 import net.mamoe.mirai.mock.contact.*
 import net.mamoe.mirai.mock.database.MessageDatabase
-import net.mamoe.mirai.mock.internal.contact.MockImage
 import net.mamoe.mirai.mock.txfs.TmpResourceServer
 import net.mamoe.mirai.mock.userprofile.UserProfileService
 import net.mamoe.mirai.mock.utils.NameGenerator
@@ -65,22 +64,16 @@ public interface MockBot : Bot, MockContactOrBot, MockUserOrBot {
     override var avatarUrl: String
 
     /// Contract API override
-    @MockBotDSL
     override fun getFriend(id: Long): MockFriend? = super.getFriend(id)?.cast()
 
-    @MockBotDSL
     override fun getFriendOrFail(id: Long): MockFriend = super.getFriendOrFail(id).cast()
 
-    @MockBotDSL
     override fun getGroup(id: Long): MockGroup? = super.getGroup(id)?.cast()
 
-    @MockBotDSL
     override fun getGroupOrFail(id: Long): MockGroup = super.getGroupOrFail(id).cast()
 
-    @MockBotDSL
     override fun getStranger(id: Long): MockStranger? = super.getStranger(id)?.cast()
 
-    @MockBotDSL
     override fun getStrangerOrFail(id: Long): MockStranger = super.getStrangerOrFail(id).cast()
 
     override val groups: ContactList<MockGroup>

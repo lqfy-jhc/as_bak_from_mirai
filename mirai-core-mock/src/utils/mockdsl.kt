@@ -31,7 +31,6 @@ import kotlin.contracts.contract
 @DslMarker
 private annotation class MockActionsDsl
 
-@MockActionsDsl
 @JvmBlockingBridge
 public object MockActions {
 
@@ -152,10 +151,15 @@ public object MockActions {
      */
     @JvmSynthetic
     @MockActionsDsl
-    public suspend inline infix fun MockUser.sayMessage(block: () -> Message): MessageChain {
-        contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
+    public suspend inline fun MockUser.saysMessage(block: () -> Message): MessageChain {
+        // no contract because compiler error
+        //contract { callsInPlace(block, InvocationKind.EXACTLY_ONCE) }
         return says(block())
     }
+
+    @JvmSynthetic
+    @PublishedApi
+    internal suspend fun MockUser.says0(msg: Message): MessageChain = says(msg)
 
     /**
      * 令 [operator] 撤回一条消息

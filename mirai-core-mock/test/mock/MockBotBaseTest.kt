@@ -15,8 +15,6 @@ import net.mamoe.mirai.event.events.MemberPermissionChangeEvent
 import net.mamoe.mirai.mock.contact.MockNormalMember
 import net.mamoe.mirai.mock.test.MockBotTestBase
 import net.mamoe.mirai.mock.userprofile.buildUserProfile
-import net.mamoe.mirai.mock.utils.group
-import net.mamoe.mirai.mock.utils.member
 import net.mamoe.mirai.mock.utils.simpleMemberInfo
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -47,12 +45,12 @@ internal class MockBotBaseTest : MockBotTestBase() {
             assertEquals(0, group.members.size)
         }
 
-        val mockGroup = bot.group(798100000L)
+        val mockGroup = bot.getGroupOrFail(798100000L)
         repeat(50) { i ->
             mockGroup.addMember(simpleMemberInfo(3700000L + i, "member$i", permission = MemberPermission.MEMBER))
         }
         repeat(50) { i ->
-            val member = mockGroup.member(3700000L + i)
+            val member = mockGroup.getOrFail(3700000L + i)
             assertEquals(MemberPermission.MEMBER, member.permission)
             assertEquals("member$i", member.nick)
             assertTrue(member.nameCard.isEmpty())
@@ -69,7 +67,7 @@ internal class MockBotBaseTest : MockBotTestBase() {
         assertEquals(MemberPermission.MEMBER, mockGroup.botPermission)
         assertSame(newOwner, mockGroup.owner)
 
-        val newNewOwner = mockGroup.member(3700000L)
+        val newNewOwner = mockGroup.getOrFail(3700000L)
         runAndReceiveEventBroadcast {
             mockGroup.changeOwner(newNewOwner)
         }.let { events ->

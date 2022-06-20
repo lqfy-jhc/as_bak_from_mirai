@@ -67,16 +67,16 @@ public interface MockUser : MockContact, MockUserOrBot, User {
      * @see [MockUser.recallMessage]
      */
     @MockBotDSL
-    public suspend infix fun says(message: MessageChain): MessageChain
+    public suspend fun says(message: MessageChain): MessageChain
 
 
     @MockBotDSL
-    public suspend infix fun says(message: Message): MessageChain {
+    public suspend fun says(message: Message): MessageChain {
         return says(message.toMessageChain())
     }
 
     @MockBotDSL
-    public suspend infix fun says(message: String): MessageChain {
+    public suspend fun says(message: String): MessageChain {
         return says(PlainText(message))
     }
 

@@ -29,7 +29,7 @@ internal class MockBotFactoryImpl : MockBotFactory {
                 "Mock Bot $id"
             }
             var configuration_: BotConfiguration by lateinitMutableProperty { BotConfiguration { } }
-            var nameGenerator: NameGenerator = NameGenerator.DEFAULT
+            var nameGenerator: NameGenerator = NameGenerator.getDefault()
             var tmpResourceServer_: TmpResourceServer by lateinitMutableProperty {
                 TmpResourceServer.newInMemoryTmpResourceServer()
             }

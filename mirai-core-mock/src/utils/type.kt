@@ -13,19 +13,11 @@ package net.mamoe.mirai.mock.utils
 
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.contact.*
-import net.mamoe.mirai.event.broadcast
-import net.mamoe.mirai.event.events.MessageRecallEvent
-import net.mamoe.mirai.event.events.NudgeEvent
-import net.mamoe.mirai.message.MessageReceipt
-import net.mamoe.mirai.message.action.Nudge
-import net.mamoe.mirai.message.data.*
+import net.mamoe.mirai.message.data.OnlineAudio
 import net.mamoe.mirai.mock.MockBot
 import net.mamoe.mirai.mock.MockBotDSL
 import net.mamoe.mirai.mock.contact.*
-import net.mamoe.mirai.mock.database.removeMessageInfo
 import net.mamoe.mirai.utils.ExternalResource
-import net.mamoe.mirai.utils.cast
-import java.util.*
 import kotlin.contracts.contract
 
 
@@ -73,22 +65,6 @@ public fun Stranger.mock(): MockStranger {
     contract { returns() implies (this@mock is MockStranger) }
     return this as MockStranger
 }
-
-@MockBotDSL
-public inline fun MockBot.group(value: Long): MockGroup = getGroupOrFail(value)
-
-@MockBotDSL
-public inline fun MockBot.friend(value: Long): MockFriend = getFriendOrFail(value)
-
-@MockBotDSL
-public inline fun MockBot.stranger(value: Long): MockStranger = getStrangerOrFail(value)
-
-@MockBotDSL
-public inline fun MockGroup.member(id: Long): MockNormalMember = getOrFail(id)
-
-@MockBotDSL
-public inline fun MockGroup.anonymous(name: String): MockAnonymousMember =
-    newAnonymous(name, UUID.randomUUID().toString())
 
 /**
  * @see MockBot.uploadOnlineAudio

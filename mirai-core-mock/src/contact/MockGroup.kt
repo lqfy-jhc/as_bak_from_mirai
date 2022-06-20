@@ -33,7 +33,7 @@ import kotlin.random.Random
 @JvmBlockingBridge
 public interface MockGroup : Group, MockContact, MockMsgSyncSupport {
     /** @see net.mamoe.mirai.IMirai.getUin */
-    public var uin: Long
+    public val uin: Long
     override val bot: MockBot
     override val members: ContactList<MockNormalMember>
     override val owner: MockNormalMember
@@ -46,6 +46,7 @@ public interface MockGroup : Group, MockContact, MockMsgSyncSupport {
      *
      * @see changeHonorMember
      */
+    @MockBotDSL
     public val honorMembers: MutableMap<GroupHonorType, MockNormalMember>
 
     /**
@@ -67,6 +68,7 @@ public interface MockGroup : Group, MockContact, MockMsgSyncSupport {
      * 注, 通过本属性获取的控制面板为原始数据存储面板, 修改并不会广播相关事件, 如果需要广播事件,
      * 请使用 [MockGroupControlPane.withActor]
      */
+    @MockBotDSL
     public val controlPane: MockGroupControlPane
 
     /** 添加一位成员, 该操作不会广播任何事件 */

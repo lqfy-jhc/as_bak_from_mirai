@@ -9,7 +9,8 @@
 
 package net.mamoe.mirai.mock.utils
 
+import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.utils.randomImageContent as miraiutils_randomImageContent
 
 // Make `randomImageContent` public
-public fun randomImageContent(): ByteArray = miraiutils_randomImageContent()
+public fun Image.Key.randomImageContent(): ByteArray = miraiutils_randomImageContent()

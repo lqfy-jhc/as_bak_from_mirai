@@ -19,6 +19,7 @@ import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.FileMessage
 import net.mamoe.mirai.mock.internal.remotefile.absolutefile.MockRemoteFiles
 import net.mamoe.mirai.mock.internal.txfs.TxFileSystemImpl
+import net.mamoe.mirai.mock.utils.MockActions.saysMessage
 import net.mamoe.mirai.mock.utils.simpleMemberInfo
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.cast
@@ -78,7 +79,8 @@ internal class AbsoluteFileTest : MockBotTestBase() {
         val f = files.root.uploadNewFile("test.txt", "c".toByteArray().toExternalResource())
         println(files.fileSystem.findByPath("/test.txt").first().path)
         runAndReceiveEventBroadcast {
-            group.addMember0(simpleMemberInfo(222, "bb", permission = MemberPermission.MEMBER)) says f.toMessage()
+            group.addMember0(simpleMemberInfo(222, "bb", permission = MemberPermission.MEMBER))
+                .saysMessage { f.toMessage() }
         }.let { events ->
             assertEquals(1, events.size)
             assertEquals(true, events[0].cast<GroupMessageEvent>().message.contains(FileMessage))

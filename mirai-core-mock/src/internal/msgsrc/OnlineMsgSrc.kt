@@ -169,7 +169,7 @@ internal inline fun <R> AbstractMockContact.newMsgSrc(
     }
     return constructor(
         intArrayOf(info.id1),
-        intArrayOf(info.id2),
+        intArrayOf(info.internal2),
         info.time.toInt(),
     )
 }

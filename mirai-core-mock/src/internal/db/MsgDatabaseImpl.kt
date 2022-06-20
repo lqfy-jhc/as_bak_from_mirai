@@ -17,7 +17,6 @@ import net.mamoe.mirai.message.data.MessageSourceKind
 import net.mamoe.mirai.mock.database.MessageDatabase
 import net.mamoe.mirai.mock.database.MessageInfo
 import net.mamoe.mirai.mock.database.mockMsgDatabaseId
-import net.mamoe.mirai.utils.currentTimeSeconds
 import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random
@@ -92,7 +91,7 @@ internal class MsgDatabaseImpl : MessageDatabase {
                 }
                 rm.time = msgInfo.time
                 rm.ids[0] = msgInfo.id1
-                rm.internalIds[0] = msgInfo.id2
+                rm.internalIds[0] = msgInfo.internal2
 
                 if (filter.invoke(rm)) {
                     yield(msgInfo)

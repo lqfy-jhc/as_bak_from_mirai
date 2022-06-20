@@ -22,10 +22,7 @@ import net.mamoe.mirai.mock.utils.MockActions.mockFireRecalled
 import net.mamoe.mirai.mock.utils.MockActions.nudged
 import net.mamoe.mirai.mock.utils.MockActions.nudgedBy
 import net.mamoe.mirai.mock.utils.MockActions.says
-import net.mamoe.mirai.mock.utils.friend
-import net.mamoe.mirai.mock.utils.group
 import net.mamoe.mirai.mock.utils.simpleMemberInfo
-import net.mamoe.mirai.mock.utils.stranger
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -45,9 +42,9 @@ internal class MessagingTest: MockBotTestBase() {
 
             bot.addStranger(987166, "sudo").says("How are you")
 
-            bot.group(5597122).sendMessage("Testing message")
-            bot.friend(9815).sendMessage("Hi my friend")
-            bot.stranger(987166).sendMessage("How are you")
+            bot.getGroupOrFail(5597122).sendMessage("Testing message")
+            bot.getFriendOrFail(9815).sendMessage("Hi my friend")
+            bot.getStrangerOrFail(987166).sendMessage("How are you")
         }.let { events ->
             assertEquals(9, events.size)
 

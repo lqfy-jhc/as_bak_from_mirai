@@ -78,7 +78,7 @@ public interface UserProfileServiceJ : UserProfileService {
 }
 
 /**
- * [UserProfile] 的 DSL 构造器
+ * [UserProfile] 的构造器
  *
  * @see [invoke]
  * @see [buildUserProfile]

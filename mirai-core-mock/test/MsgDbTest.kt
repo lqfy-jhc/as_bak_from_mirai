@@ -30,7 +30,7 @@ internal class MsgDbTest {
                 messageChainOf()
             )
             assertEquals(id1, msgInfo.id1)
-            assertEquals(id2, msgInfo.id2)
+            assertEquals(id2, msgInfo.internal2)
         }
     }
 

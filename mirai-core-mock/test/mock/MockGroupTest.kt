@@ -23,11 +23,9 @@ import net.mamoe.mirai.mock.test.MockBotTestBase
 import net.mamoe.mirai.mock.utils.MockActions.nameCardChangesTo
 import net.mamoe.mirai.mock.utils.MockActions.permissionChangesTo
 import net.mamoe.mirai.mock.utils.MockActions.specialTitleChangesTo
-import net.mamoe.mirai.mock.utils.member
 import net.mamoe.mirai.mock.utils.simpleMemberInfo
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.cast
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import kotlin.test.*
 
@@ -53,7 +51,7 @@ internal class MockGroupTest : MockBotTestBase() {
             }
         }
 
-        val member = group.member(100000000)
+        val member = group.getOrFail(100000000)
         assertEquals(MemberPermission.MEMBER, member.permission)
     }
 

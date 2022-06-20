@@ -16,7 +16,7 @@ package net.mamoe.mirai.utils
 import android.graphics.Bitmap
 import java.io.ByteArrayOutputStream
 
-public fun randomImage_android(): Bitmap {
+internal fun randomImage_android(): Bitmap {
     val width = (500..800).random()
     val height = (500..800).random()
     val bitmap = Bitmap.createBitmap(

@@ -18,7 +18,7 @@ import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
-public fun randomImage_awt_jvm(): BufferedImage {
+internal fun randomImage_awt_jvm(): BufferedImage {
     val width = (500..800).random()
     val height = (500..800).random()
     val image = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)

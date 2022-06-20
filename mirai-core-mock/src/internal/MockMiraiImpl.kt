@@ -11,7 +11,6 @@
 
 package net.mamoe.mirai.mock.internal
 
-import kotlinx.coroutines.currentCoroutineContext
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.BotFactory
 import net.mamoe.mirai.contact.*
@@ -21,9 +20,7 @@ import net.mamoe.mirai.data.UserProfile
 import net.mamoe.mirai.event.Event
 import net.mamoe.mirai.event.broadcast
 import net.mamoe.mirai.event.events.*
-import net.mamoe.mirai.internal.AbstractBot
 import net.mamoe.mirai.internal.MiraiImpl
-import net.mamoe.mirai.internal.event.EventChannelToEventDispatcherAdapter
 import net.mamoe.mirai.internal.network.components.EventDispatcher
 import net.mamoe.mirai.message.action.Nudge
 import net.mamoe.mirai.message.data.*

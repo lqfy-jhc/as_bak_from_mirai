@@ -22,12 +22,14 @@ public interface NameGenerator {
     public fun nextFriendName(): String
 
     public companion object {
-        @JvmField
-        public val DEFAULT: NameGenerator = SimpleNameGenerator()
+        private val DEFAULT: NameGenerator = SimpleNameGenerator()
+
+        @JvmStatic
+        public fun getDefault(): NameGenerator = DEFAULT
     }
 }
 
-public class SimpleNameGenerator : NameGenerator {
+public open class SimpleNameGenerator : NameGenerator {
     private val groupCounter = AtomicInteger(0)
     private val friendCounter = AtomicInteger(0)
 

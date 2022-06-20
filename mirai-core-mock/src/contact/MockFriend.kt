@@ -30,6 +30,7 @@ public interface MockFriend : Friend, MockContact, MockUser, MockMsgSyncSupport 
     /**
      * 获取直接修改字段内容的 API, 通过该 API 修改的值都不会触发广播
      */
+    @MockBotDSL
     public val mockApi: MockApi
 
     /**
