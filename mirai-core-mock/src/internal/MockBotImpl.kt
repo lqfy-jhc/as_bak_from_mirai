@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 Mamoe Technologies and contributors.
+ * Copyright 2019-2022 Mamoe Technologies and contributors.
  *
  * 此源代码的使用受 GNU AFFERO GENERAL PUBLIC LICENSE version 3 许可证的约束, 可以在以下链接找到该许可证.
  * Use of this source code is governed by the GNU AGPLv3 license that can be found through the following link.
@@ -15,6 +15,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.isActive
 import net.mamoe.mirai.Bot
 import net.mamoe.mirai.Mirai
+import net.mamoe.mirai.contact.AvatarSpec
 import net.mamoe.mirai.contact.ContactList
 import net.mamoe.mirai.contact.ContactOrBot
 import net.mamoe.mirai.contact.MemberPermission
@@ -34,11 +35,6 @@ import net.mamoe.mirai.mock.contact.MockStranger
 import net.mamoe.mirai.mock.database.MessageDatabase
 import net.mamoe.mirai.mock.internal.components.MockEventDispatcherImpl
 import net.mamoe.mirai.mock.internal.contact.*
-import net.mamoe.mirai.mock.internal.contact.MockFriendImpl
-import net.mamoe.mirai.mock.internal.contact.MockGroupImpl
-import net.mamoe.mirai.mock.internal.contact.MockImage
-import net.mamoe.mirai.mock.internal.contact.MockStrangerImpl
-import net.mamoe.mirai.mock.internal.contact.mockImplUploadAudioAsOnline
 import net.mamoe.mirai.mock.internal.txfs.TmpResourceServerImpl
 import net.mamoe.mirai.mock.txfs.TmpResourceServer
 import net.mamoe.mirai.mock.userprofile.UserProfileService
@@ -76,7 +72,7 @@ internal class MockBotImpl(
             val f = field
             if (f.isEmpty()) {
                 @Suppress("QUALIFIED_SUPERTYPE_EXTENDED_BY_OTHER_SUPERTYPE", "RemoveExplicitSuperQualifier")
-                return super<ContactOrBot>.avatarUrl
+                return super<ContactOrBot>.avatarUrl(spec = AvatarSpec.LARGEST)
             }
             return f
         }
@@ -84,6 +80,10 @@ internal class MockBotImpl(
             field = value
             BotAvatarChangedEvent(this).broadcastBlocking()
         }
+
+    override fun avatarUrl(spec: AvatarSpec): String {
+        return avatarUrl
+    }
 
     override val logger: MiraiLogger by lazy {
         configuration.botLoggerSupplier(this)
@@ -135,6 +135,7 @@ internal class MockBotImpl(
     override val strangers: ContactList<MockStranger> = ContactList()
     override val otherClients: ContactList<MockOtherClient> = ContactList()
 
+    @Suppress("DEPRECATION")
     override fun addGroup(id: Long, name: String): MockGroup =
         addGroup(id, Mirai.calculateGroupUinByGroupCode(id), name)
 

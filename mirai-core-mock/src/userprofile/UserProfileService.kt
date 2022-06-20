@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 Mamoe Technologies and contributors.
+ * Copyright 2019-2022 Mamoe Technologies and contributors.
  *
  * 此源代码的使用受 GNU AFFERO GENERAL PUBLIC LICENSE version 3 许可证的约束, 可以在以下链接找到该许可证.
  * Use of this source code is governed by the GNU AGPLv3 license that can be found through the following link.
@@ -12,6 +12,7 @@ package net.mamoe.mirai.mock.userprofile
 import me.him188.kotlin.jvm.blocking.bridge.JvmBlockingBridge
 import net.mamoe.mirai.IMirai
 import net.mamoe.mirai.data.UserProfile
+import net.mamoe.mirai.mock.MockBot
 import net.mamoe.mirai.mock.userprofile.MockUserProfileBuilder.Companion.invoke
 import net.mamoe.mirai.utils.runBIO
 import java.util.concurrent.ConcurrentHashMap
@@ -22,6 +23,9 @@ import kotlin.contracts.contract
  * 用户资料服务, 用于 [IMirai.queryProfile] 查询用户资料
  *
  * implementation note: Java 请实现 [UserProfileServiceJ]
+ *
+ * @see MockBot.userProfileService
+ * @see MockUserProfileBuilder
  */
 @JvmBlockingBridge
 public interface UserProfileService {
@@ -91,7 +95,7 @@ public interface MockUserProfileBuilder {
 
     public companion object {
         @JvmStatic
-        @JvmName("builder")
+        @JvmName("newBuilder")
         public operator fun invoke(): MockUserProfileBuilder = MockUPBuilderImpl()
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 Mamoe Technologies and contributors.
+ * Copyright 2019-2022 Mamoe Technologies and contributors.
  *
  * 此源代码的使用受 GNU AFFERO GENERAL PUBLIC LICENSE version 3 许可证的约束, 可以在以下链接找到该许可证.
  * Use of this source code is governed by the GNU AGPLv3 license that can be found through the following link.
@@ -11,6 +11,7 @@ package net.mamoe.mirai.mock.internal.contact
 
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.runBlocking
+import net.mamoe.mirai.contact.AvatarSpec
 import net.mamoe.mirai.contact.Stranger
 import net.mamoe.mirai.event.broadcast
 import net.mamoe.mirai.event.events.*
@@ -42,7 +43,14 @@ internal class MockStrangerImpl(
         override var nick: String = nick
         override var remark: String = remark
     }
-    override var avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
+    override var avatarUrl: String by lateinitMutableProperty {
+        bot.getFriend(id)?.let { return@lateinitMutableProperty it.avatarUrl }
+        runBlocking { MockImage.random(bot).getUrl(bot) }
+    }
+
+    override fun avatarUrl(spec: AvatarSpec): String {
+        return avatarUrl
+    }
 
     override val nick: String
         get() = mockApi.nick

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 Mamoe Technologies and contributors.
+ * Copyright 2019-2022 Mamoe Technologies and contributors.
  *
  * 此源代码的使用受 GNU AFFERO GENERAL PUBLIC LICENSE version 3 许可证的约束, 可以在以下链接找到该许可证.
  * Use of this source code is governed by the GNU AGPLv3 license that can be found through the following link.
@@ -50,7 +50,15 @@ internal class MockNormalMemberImpl(
     parentCoroutineContext, bot,
     id
 ), MockNormalMember {
-    override var avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
+    override var avatarUrl: String by lateinitMutableProperty {
+        bot.getFriend(id)?.let { return@lateinitMutableProperty it.avatarUrl }
+        runBlocking { MockImage.random(bot).getUrl(bot) }
+    }
+
+    override fun avatarUrl(spec: AvatarSpec): String {
+        return avatarUrl
+    }
+
     private inline fun <T> crossFriendAccess(
         ifExists: (MockFriend) -> T,
         ifNotExists: () -> T,

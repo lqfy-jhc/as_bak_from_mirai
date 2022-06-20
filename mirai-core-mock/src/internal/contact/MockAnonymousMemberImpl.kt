@@ -1,5 +1,5 @@
 /*
- * Copyright 2019-2021 Mamoe Technologies and contributors.
+ * Copyright 2019-2022 Mamoe Technologies and contributors.
  *
  * 此源代码的使用受 GNU AFFERO GENERAL PUBLIC LICENSE version 3 许可证的约束, 可以在以下链接找到该许可证.
  * Use of this source code is governed by the GNU AGPLv3 license that can be found through the following link.
@@ -10,6 +10,7 @@
 package net.mamoe.mirai.mock.internal.contact
 
 import kotlinx.coroutines.runBlocking
+import net.mamoe.mirai.contact.AvatarSpec
 import net.mamoe.mirai.contact.MemberPermission
 import net.mamoe.mirai.contact.nameCardOrNick
 import net.mamoe.mirai.event.broadcast
@@ -42,7 +43,12 @@ internal class MockAnonymousMemberImpl(
         throw AssertionError()
     }
 
+    // TODO
     override var avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
+    override fun avatarUrl(spec: AvatarSpec): String {
+        return avatarUrl
+    }
+
     override suspend fun postMessagePreSend(message: MessageChain, receipt: MessageReceipt<*>) {
         throw AssertionError()
     }
@@ -69,10 +75,10 @@ internal class MockAnonymousMemberImpl(
 
     override var remark: String
         get() = ""
-        set(value) {}
+        set(_) {}
     override var nick: String
         get() = nameCard
-        set(value) {}
+        set(_) {}
 
     override val nameCard: String
         get() = mockApi.nick
@@ -85,11 +91,11 @@ internal class MockAnonymousMemberImpl(
 
         override var remark: String
             get() = ""
-            set(value) {}
+            set(_) {}
 
         override var permission: MemberPermission
             get() = MemberPermission.MEMBER
-            set(value) {}
+            set(_) {}
     }
 
 
