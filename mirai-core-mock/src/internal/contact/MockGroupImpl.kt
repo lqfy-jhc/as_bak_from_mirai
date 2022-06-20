@@ -324,8 +324,7 @@ internal class MockGroupImpl(
         //MockRemoteFileRoot(this)
     }
 
-    override val files: RemoteFiles
-        get() = TODO("Not yet implemented")
+    override val files: RemoteFiles = MockRemoteFiles(this, txFileSystem)
 
     override suspend fun uploadAudio(resource: ExternalResource): OfflineAudio =
         resource.mockUploadAudio(bot)
