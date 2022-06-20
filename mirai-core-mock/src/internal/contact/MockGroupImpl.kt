@@ -320,7 +320,7 @@ internal class MockGroupImpl(
 
     @Suppress("OverridingDeprecatedMember", "DEPRECATION")
     override val filesRoot: RemoteFile by lazy {
-        net.mamoe.mirai.mock.internal.remotefile.v1.MockRemoteFileRoot(this)
+        net.mamoe.mirai.mock.internal.remotefile.v1.MockRemoteFileRoot(this, txFileSystem)
         //MockRemoteFileRoot(this)
     }
 
