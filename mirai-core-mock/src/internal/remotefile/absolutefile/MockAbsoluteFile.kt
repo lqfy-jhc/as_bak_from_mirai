@@ -18,7 +18,7 @@ import net.mamoe.mirai.contact.file.AbsoluteFolder
 import net.mamoe.mirai.internal.message.data.FileMessageImpl
 import net.mamoe.mirai.message.data.FileMessage
 import net.mamoe.mirai.mock.internal.remotefile.remotefile.MockRemoteFile
-import net.mamoe.mirai.mock.txfs.TxRemoteFile
+import net.mamoe.mirai.mock.resserver.MockServerRemoteFile
 import net.mamoe.mirai.mock.utils.mock
 
 internal class MockAbsoluteFile(
@@ -62,7 +62,7 @@ internal class MockAbsoluteFile(
         parent!!.files().filter { it.id == id }.firstOrNull()
 
 
-    private fun canModify(resolved: TxRemoteFile): Boolean {
+    private fun canModify(resolved: MockServerRemoteFile): Boolean {
         return MockRemoteFile.canModify(resolved, contact)
     }
 

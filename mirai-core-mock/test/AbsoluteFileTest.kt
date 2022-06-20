@@ -18,7 +18,7 @@ import net.mamoe.mirai.contact.MemberPermission
 import net.mamoe.mirai.event.events.GroupMessageEvent
 import net.mamoe.mirai.message.data.FileMessage
 import net.mamoe.mirai.mock.internal.remotefile.absolutefile.MockRemoteFiles
-import net.mamoe.mirai.mock.internal.txfs.TxFileSystemImpl
+import net.mamoe.mirai.mock.internal.txfs.MockServerFileSystemImpl
 import net.mamoe.mirai.mock.utils.MockActions.saysMessage
 import net.mamoe.mirai.mock.utils.simpleMemberInfo
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
@@ -31,9 +31,9 @@ import kotlin.test.assertNotEquals
 
 internal class AbsoluteFileTest : MockBotTestBase() {
     private val tmpfs: FileSystem = Jimfs.newFileSystem(Configuration.unix())
-    private val disk = bot.tmpResourceServer.txFileDisk
+    private val disk = bot.tmpResourceServer.mockServerFileDisk
     private val group = bot.addGroup(11L, "a").also { println(it.owner) }
-    private val fsys = TxFileSystemImpl(disk.cast())
+    private val fsys = MockServerFileSystemImpl(disk.cast())
     private val files = MockRemoteFiles(group, fsys)
 
     @AfterEach

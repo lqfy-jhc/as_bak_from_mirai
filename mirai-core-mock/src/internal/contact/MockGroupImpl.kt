@@ -48,7 +48,7 @@ internal class MockGroupImpl(
     parentCoroutineContext, bot, id
 ), MockGroup {
     override val honorMembers: MutableMap<GroupHonorType, MockNormalMember> = EnumMap(GroupHonorType::class.java)
-    private val txFileSystem by lazy { bot.mock().tmpResourceServer.txFileDisk.newFsSystem() }
+    private val txFileSystem by lazy { bot.mock().tmpResourceServer.mockServerFileDisk.newFsSystem() }
 
     override var avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
     override fun avatarUrl(spec: AvatarSpec): String {

@@ -13,19 +13,22 @@ package net.mamoe.mirai.mock.internal.remotefile.remotefile
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
-import net.mamoe.mirai.contact.*
+import net.mamoe.mirai.contact.Contact
+import net.mamoe.mirai.contact.FileSupported
+import net.mamoe.mirai.contact.PermissionDeniedException
+import net.mamoe.mirai.contact.isOperator
+import net.mamoe.mirai.internal.message.data.FileMessageImpl
 import net.mamoe.mirai.message.MessageReceipt
 import net.mamoe.mirai.message.data.FileMessage
-import net.mamoe.mirai.mock.txfs.TxFileSystem
-import net.mamoe.mirai.mock.txfs.TxRemoteFile
-import net.mamoe.mirai.utils.*
-import net.mamoe.mirai.internal.message.data.FileMessageImpl
 import net.mamoe.mirai.mock.contact.MockGroup
+import net.mamoe.mirai.mock.resserver.MockServerFileSystem
+import net.mamoe.mirai.mock.resserver.MockServerRemoteFile
 import net.mamoe.mirai.mock.utils.mock
+import net.mamoe.mirai.utils.*
 import kotlin.io.path.inputStream
 
 internal class RootRemoteFile(
-    val fileSystem: TxFileSystem,
+    val fileSystem: MockServerFileSystem,
     override val contact: FileSupported,
 ) : RemoteFile {
     override val name: String get() = ""
@@ -88,7 +91,7 @@ internal class RootRemoteFile(
         return convert(resolved)
     }
 
-    internal fun convert(src: TxRemoteFile): RemoteFile {
+    internal fun convert(src: MockServerRemoteFile): RemoteFile {
         if (src == fileSystem.root) return this
         return MockRemoteFile(
             name = src.name,
@@ -131,7 +134,7 @@ internal class RootRemoteFile(
 
     override suspend fun getDownloadInfo(): RemoteFile.DownloadInfo? = null
 
-    fun resolveTx(f: RemoteFile?): TxRemoteFile? {
+    fun resolveTx(f: RemoteFile?): MockServerRemoteFile? {
         if (f === this) return fileSystem.root
         return f.cast<MockRemoteFile>().resolveFile()
     }
@@ -148,14 +151,14 @@ internal class MockRemoteFile(
     override val id: String? get() = fileId
     override val contact: FileSupported get() = root.contact
     private val fileSystem get() = root.fileSystem
-    internal fun resolveFile(): TxRemoteFile? {
+    internal fun resolveFile(): MockServerRemoteFile? {
         fileId?.let { fid ->
             fileSystem.resolveById(fid)?.let { return it }
         }
         return fileSystem.findByPath(path).firstOrNull()
     }
 
-    private fun convert(src: TxRemoteFile): RemoteFile = root.convert(src)
+    private fun convert(src: MockServerRemoteFile): RemoteFile = root.convert(src)
 
     override suspend fun isFile(): Boolean {
         return resolveFile()?.isFile ?: false
@@ -333,7 +336,7 @@ internal class MockRemoteFile(
     }
 
     companion object {
-        internal fun canModify(resolved: TxRemoteFile, contact: FileSupported): Boolean {
+        internal fun canModify(resolved: MockServerRemoteFile, contact: FileSupported): Boolean {
             contact.safeCast<MockGroup>()?.let check@{ group ->
                 if (group.botPermission.isOperator()) return true
                 if (resolved.isDirectory) return false

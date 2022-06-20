@@ -7,11 +7,11 @@
  * https://github.com/mamoe/mirai/blob/dev/LICENSE
  */
 
-package net.mamoe.mirai.mock.txfs
+package net.mamoe.mirai.mock.resserver
 
-public interface TxFileSystem {
-    public val disk: TxFileDisk
-    public val root: TxRemoteFile
-    public fun resolveById(id: String): TxRemoteFile?
-    public fun findByPath(path: String): Sequence<TxRemoteFile>
+public interface MockServerFileSystem {
+    public val disk: MockServerFileDisk
+    public val root: MockServerRemoteFile
+    public fun resolveById(id: String): MockServerRemoteFile?
+    public fun findByPath(path: String): Sequence<MockServerRemoteFile>
 }

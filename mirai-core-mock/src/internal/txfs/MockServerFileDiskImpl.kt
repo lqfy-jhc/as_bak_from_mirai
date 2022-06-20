@@ -11,10 +11,10 @@
 
 package net.mamoe.mirai.mock.internal.txfs
 
-import net.mamoe.mirai.mock.txfs.TxFileDisk
-import net.mamoe.mirai.mock.txfs.TxFileSystem
-import net.mamoe.mirai.mock.txfs.TxRemoteFile
-import net.mamoe.mirai.mock.txfs.TxRemoteFileInfo
+import net.mamoe.mirai.mock.resserver.MockServerFileDisk
+import net.mamoe.mirai.mock.resserver.MockServerFileSystem
+import net.mamoe.mirai.mock.resserver.MockServerRemoteFile
+import net.mamoe.mirai.mock.resserver.TxRemoteFileInfo
 import net.mamoe.mirai.utils.*
 import java.nio.file.Files
 import java.nio.file.Path
@@ -37,19 +37,19 @@ private fun checkFileName(name: String) {
     if (name.isEmpty()) error("Empty name")
 }
 
-internal class TxFileDiskImpl(
+internal class MockServerFileDiskImpl(
     internal val storage: Path
-) : TxFileDisk {
-    internal val fs: MutableCollection<TxFileSystem> = ConcurrentLinkedDeque()
+) : MockServerFileDisk {
+    internal val fs: MutableCollection<MockServerFileSystem> = ConcurrentLinkedDeque()
 
-    override val availableSystems: Sequence<TxFileSystem> = Sequence { fs.iterator() }
+    override val availableSystems: Sequence<MockServerFileSystem> = Sequence { fs.iterator() }
 
-    override fun newFsSystem(): TxFileSystem = TxFileSystemImpl(this)
+    override fun newFsSystem(): MockServerFileSystem = MockServerFileSystemImpl(this)
 }
 
-internal class TxFileSystemImpl(
-    override val disk: TxFileDiskImpl,
-) : TxFileSystem {
+internal class MockServerFileSystemImpl(
+    override val disk: MockServerFileDiskImpl,
+) : MockServerFileSystem {
     internal val storage: Path = allocateNewPath(disk.storage)
 
     internal fun resolvePath(id: String): Path = when {
@@ -80,7 +80,7 @@ internal class TxFileSystemImpl(
         else -> null
     } ?: id.substringAfterLast('/')
 
-    fun resolveParent(id: String): TxFileImpl {
+    fun resolveParent(id: String): MockServerFileImpl {
         val details = fileDetails(id) ?: return root
         val parent = details.resolve("parent")
         if (parent.isFile) {
@@ -97,18 +97,18 @@ internal class TxFileSystemImpl(
         disk.fs.add(this)
     }
 
-    override val root = TxFileImpl(this, "/")
+    override val root = MockServerFileImpl(this, "/")
 
-    override fun resolveById(id: String): TxFileImpl? {
+    override fun resolveById(id: String): MockServerFileImpl? {
         if (id == "/" || id.isEmpty()) return root
         if (id[0] != '/') return null
         if (MiraiFileSystem.isLegal(id) && id.count { it == '/' } == 1) {
-            return TxFileImpl(this, id).takeIf { it.toPath.exists() }
+            return MockServerFileImpl(this, id).takeIf { it.toPath.exists() }
         }
         return null
     }
 
-    override fun findByPath(path: String): Sequence<TxRemoteFile> {
+    override fun findByPath(path: String): Sequence<MockServerRemoteFile> {
         return root.findByPath(
             MiraiFileSystem.normalize(path)
                 .removePrefix("/")
@@ -117,7 +117,7 @@ internal class TxFileSystemImpl(
         )
     }
 
-    fun findDirByName(base: TxFileImpl, name: String): TxFileImpl? {
+    fun findDirByName(base: MockServerFileImpl, name: String): MockServerFileImpl? {
         return (base.listFiles() ?: return null)
             .filter { it.isDirectory }
             .filter { it.name == name }
@@ -130,7 +130,7 @@ internal class TxFileSystemImpl(
         uploader: Long,
         id: String,
         toPath: Path
-    ): TxFileImpl {
+    ): MockServerFileImpl {
         val path = allocateNewPath(storage)
         val fid = '/' + path.name
 
@@ -144,7 +144,7 @@ internal class TxFileSystemImpl(
         details.mkdirs()
         overrideDetails(details, id, name, uploader, currentTimeMillis())
 
-        return TxFileImpl(this, fid)
+        return MockServerFileImpl(this, fid)
     }
 
     fun overrideDetails(
@@ -168,8 +168,8 @@ internal class TxFileSystemImpl(
         }
     }
 
-    fun mkdir(id: String, name: String, creator: Long, toPath: Path): TxFileImpl {
-        if (id != "/") error("Creating 2nd directories, TxFileSystem current not support")
+    fun mkdir(id: String, name: String, creator: Long, toPath: Path): MockServerFileImpl {
+        if (id != "/") error("Creating 2nd directories, MockServerFileSystem current not support")
 
         // Find existing subdir
         Files.newDirectoryStream(toPath).use { ptdirstream ->
@@ -179,7 +179,7 @@ internal class TxFileSystemImpl(
                 return@firstOrNull nameFile.readText() == name
             }
             if (exists != null) {
-                return TxFileImpl(this, "/" + exists.fileName)
+                return MockServerFileImpl(this, "/" + exists.fileName)
             }
         }
 
@@ -192,7 +192,7 @@ internal class TxFileSystemImpl(
         details.mkdirs()
         overrideDetails(details, id, name, creator, currentTimeMillis())
 
-        return TxFileImpl(this, fid)
+        return MockServerFileImpl(this, fid)
     }
 
     fun resolveAbsPath(id: String): String {
@@ -212,17 +212,17 @@ internal class TxFileSystemImpl(
     }
 }
 
-internal class TxFileImpl(
-    override val system: TxFileSystemImpl,
+internal class MockServerFileImpl(
+    override val system: MockServerFileSystemImpl,
     override val id: String,
-) : TxRemoteFile {
+) : MockServerRemoteFile {
     internal val toPath: Path get() = system.resolvePath(id)
     override val exists: Boolean get() = toPath.exists()
     override val isFile: Boolean get() = toPath.isFile
     override val isDirectory: Boolean get() = toPath.isDirectory()
     override val name: String get() = system.resolveName(id)
     override val path: String get() = system.resolveAbsPath(id)
-    override val parent: TxFileImpl get() = system.resolveParent(id)
+    override val parent: MockServerFileImpl get() = system.resolveParent(id)
     override val size: Long
         get() {
             val pt = toPath
@@ -230,14 +230,14 @@ internal class TxFileImpl(
             return 0
         }
 
-    override fun listFiles(): Sequence<TxRemoteFile>? {
+    override fun listFiles(): Sequence<MockServerRemoteFile>? {
         val pt = toPath
         if (!pt.isDirectory()) {
             return null
         }
         return pt.listDirectoryEntries().asSequence().filter {
             it.exists()
-        }.map { TxFileImpl(system, '/' + it.name) }
+        }.map { MockServerFileImpl(system, '/' + it.name) }
     }
 
     override fun delete(): Boolean {
@@ -258,8 +258,8 @@ internal class TxFileImpl(
         return true
     }
 
-    override fun moveTo(path: TxRemoteFile) {
-        path.cast<TxFileImpl>()
+    override fun moveTo(path: MockServerRemoteFile) {
+        path.cast<MockServerFileImpl>()
         if (path.system !== this.system) error("Cross file system moving")
 
         if (!path.isDirectory) error("Remote file $path not exists")
@@ -288,7 +288,7 @@ internal class TxFileImpl(
         TODO("https://github.com/mamoe/mirai/pull/1637")
     }
 
-    override fun uploadFile(name: String, content: ExternalResource, uploader: Long): TxFileImpl {
+    override fun uploadFile(name: String, content: ExternalResource, uploader: Long): MockServerFileImpl {
         content.withAutoClose {
             checkFileName(name)
             val storage = toPath
@@ -299,7 +299,7 @@ internal class TxFileImpl(
         }
     }
 
-    override fun mksubdir(name: String, creator: Long): TxRemoteFile {
+    override fun mksubdir(name: String, creator: Long): MockServerRemoteFile {
         checkFileName(name)
         return system.mkdir(id, name, creator, toPath)
     }
@@ -330,7 +330,7 @@ internal class TxFileImpl(
     override fun toString(): String = "$path := $id"
 
     override fun equals(other: Any?): Boolean {
-        if (other !is TxFileImpl) return false
+        if (other !is MockServerFileImpl) return false
         if (other.system !== system) return false
         return other.id == this.id
     }
@@ -339,7 +339,7 @@ internal class TxFileImpl(
         return id.hashCode() + system.hashCode()
     }
 
-    fun findByPath(path: MutableList<String>): Sequence<TxRemoteFile> {
+    fun findByPath(path: MutableList<String>): Sequence<MockServerRemoteFile> {
         if (path.isEmpty()) error("Empty path")
         val nxt = path.removeAt(0)
         if (nxt.isEmpty()) error("Empty subpath")

@@ -14,11 +14,11 @@ package net.mamoe.mirai.mock.internal.remotefile.absolutefile
 import net.mamoe.mirai.contact.FileSupported
 import net.mamoe.mirai.contact.file.AbsoluteFolder
 import net.mamoe.mirai.contact.file.RemoteFiles
-import net.mamoe.mirai.mock.txfs.TxFileSystem
+import net.mamoe.mirai.mock.resserver.MockServerFileSystem
 
 internal class MockRemoteFiles(
     override val contact: FileSupported,
-    val fileSystem: TxFileSystem,
+    val fileSystem: MockServerFileSystem,
 ) : RemoteFiles {
     override val root: AbsoluteFolder = MRF_AbsoluteFolderRoot(this)
 }

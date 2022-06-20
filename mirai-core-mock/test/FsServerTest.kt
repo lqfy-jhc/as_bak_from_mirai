@@ -12,7 +12,7 @@
 package net.mamoe.mirai.mock.test
 
 import kotlinx.coroutines.runBlocking
-import net.mamoe.mirai.mock.txfs.TmpResourceServer
+import net.mamoe.mirai.mock.resserver.TmpResourceServer
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import net.mamoe.mirai.utils.mkParentDirs
 import org.junit.jupiter.api.Test

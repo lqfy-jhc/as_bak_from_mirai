@@ -22,7 +22,7 @@ import net.mamoe.mirai.message.data.Image
 import net.mamoe.mirai.message.data.OnlineAudio
 import net.mamoe.mirai.mock.contact.*
 import net.mamoe.mirai.mock.database.MessageDatabase
-import net.mamoe.mirai.mock.txfs.TmpResourceServer
+import net.mamoe.mirai.mock.resserver.TmpResourceServer
 import net.mamoe.mirai.mock.userprofile.UserProfileService
 import net.mamoe.mirai.mock.utils.NameGenerator
 import net.mamoe.mirai.utils.ExternalResource

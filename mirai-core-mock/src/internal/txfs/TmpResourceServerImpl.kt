@@ -14,8 +14,8 @@ import io.ktor.features.*
 import io.ktor.response.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import net.mamoe.mirai.mock.txfs.TmpResourceServer
-import net.mamoe.mirai.mock.txfs.TxFileDisk
+import net.mamoe.mirai.mock.resserver.MockServerFileDisk
+import net.mamoe.mirai.mock.resserver.TmpResourceServer
 import net.mamoe.mirai.utils.*
 import java.net.ServerSocket
 import java.net.URI
@@ -39,8 +39,8 @@ internal class TmpResourceServerImpl(
     }
     override val serverUri: URI get() = _serverUri
 
-    override val txFileDisk: TxFileDisk by lazy {
-        TxFileDiskImpl(storageRoot.resolve("tx-fs-disk"))
+    override val mockServerFileDisk: MockServerFileDisk by lazy {
+        MockServerFileDiskImpl(storageRoot.resolve("tx-fs-disk"))
     }
 
     private var _isActive: Boolean = false

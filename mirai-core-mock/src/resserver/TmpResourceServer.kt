@@ -7,7 +7,7 @@
  * https://github.com/mamoe/mirai/blob/dev/LICENSE
  */
 
-package net.mamoe.mirai.mock.txfs
+package net.mamoe.mirai.mock.resserver
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
@@ -31,7 +31,7 @@ import java.nio.file.Path
 public interface TmpResourceServer : Closeable {
     public val serverUri: URI
     public val storageRoot: Path
-    public val txFileDisk: TxFileDisk
+    public val mockServerFileDisk: MockServerFileDisk
     public val isActive: Boolean
 
     /**

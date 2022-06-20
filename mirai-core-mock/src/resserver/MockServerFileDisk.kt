@@ -7,19 +7,19 @@
  * https://github.com/mamoe/mirai/blob/dev/LICENSE
  */
 
-package net.mamoe.mirai.mock.txfs
+package net.mamoe.mirai.mock.resserver
 
-import net.mamoe.mirai.mock.internal.txfs.TxFileDiskImpl
+import net.mamoe.mirai.mock.internal.txfs.MockServerFileDiskImpl
 import java.nio.file.Path
 
-public interface TxFileDisk {
-    public val availableSystems: Sequence<TxFileSystem>
-    public fun newFsSystem(): TxFileSystem
+public interface MockServerFileDisk {
+    public val availableSystems: Sequence<MockServerFileSystem>
+    public fun newFsSystem(): MockServerFileSystem
 
     public companion object {
         @JvmStatic
-        public fun newFileDisk(storage: Path): TxFileDisk {
-            return TxFileDiskImpl(storage)
+        public fun newFileDisk(storage: Path): MockServerFileDisk {
+            return MockServerFileDiskImpl(storage)
         }
     }
 }

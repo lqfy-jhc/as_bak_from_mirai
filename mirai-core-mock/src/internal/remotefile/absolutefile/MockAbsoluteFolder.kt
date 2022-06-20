@@ -20,7 +20,7 @@ import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.internal.utils.FileSystem
 import net.mamoe.mirai.mock.contact.MockGroup
 import net.mamoe.mirai.mock.internal.remotefile.remotefile.MockRemoteFile
-import net.mamoe.mirai.mock.txfs.TxRemoteFile
+import net.mamoe.mirai.mock.resserver.MockServerRemoteFile
 import net.mamoe.mirai.utils.ExternalResource
 import net.mamoe.mirai.utils.JavaFriendlyAPI
 import net.mamoe.mirai.utils.ProgressionCallback
@@ -28,7 +28,7 @@ import net.mamoe.mirai.utils.safeCast
 import java.util.stream.Stream
 import kotlin.streams.asStream
 
-private fun TxRemoteFile.toMockAbsFolder(files: MockRemoteFiles): AbsoluteFolder {
+private fun MockServerRemoteFile.toMockAbsFolder(files: MockRemoteFiles): AbsoluteFolder {
     if (this == files.fileSystem.root) return files.root
     val parent = this.parent.toMockAbsFolder(files)
     return MockAbsoluteFolder(
@@ -41,7 +41,7 @@ private fun TxRemoteFile.toMockAbsFolder(files: MockRemoteFiles): AbsoluteFolder
     )
 }
 
-private fun TxRemoteFile.toMockAbsFile(
+private fun MockServerRemoteFile.toMockAbsFile(
     files: MockRemoteFiles,
     md5: ByteArray = byteArrayOf(),
     sha1: ByteArray = byteArrayOf()
@@ -216,7 +216,7 @@ internal open class MockAbsoluteFolder(
 
     override suspend fun exists(): Boolean = _exists
 
-    private fun canModify(resolved: TxRemoteFile): Boolean {
+    private fun canModify(resolved: MockServerRemoteFile): Boolean {
         return MockRemoteFile.canModify(resolved, contact)
     }
 

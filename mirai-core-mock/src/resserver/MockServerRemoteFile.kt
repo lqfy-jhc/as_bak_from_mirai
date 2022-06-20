@@ -7,13 +7,13 @@
  * https://github.com/mamoe/mirai/blob/dev/LICENSE
  */
 
-package net.mamoe.mirai.mock.txfs
+package net.mamoe.mirai.mock.resserver
 
 import net.mamoe.mirai.utils.ExternalResource
 import java.nio.file.Path
 
-public interface TxRemoteFile {
-    public val system: TxFileSystem
+public interface MockServerRemoteFile {
+    public val system: MockServerFileSystem
 
     public val isFile: Boolean
     public val isDirectory: Boolean
@@ -21,10 +21,10 @@ public interface TxRemoteFile {
     public val path: String
     public val id: String
     public val exists: Boolean
-    public val parent: TxRemoteFile
+    public val parent: MockServerRemoteFile
     public val size: Long
 
-    public fun listFiles(): Sequence<TxRemoteFile>?
+    public fun listFiles(): Sequence<MockServerRemoteFile>?
     public fun delete(): Boolean
     public fun rename(name: String): Boolean
 
@@ -32,14 +32,14 @@ public interface TxRemoteFile {
      * 移动文件
      * @param path 目标目录
      */
-    public fun moveTo(path: TxRemoteFile)
+    public fun moveTo(path: MockServerRemoteFile)
 
     public fun asExternalResource(): ExternalResource
     public fun resolveNativePath(): Path
 
-    public fun uploadFile(name: String, content: ExternalResource, uploader: Long): TxRemoteFile
+    public fun uploadFile(name: String, content: ExternalResource, uploader: Long): MockServerRemoteFile
 
-    public fun mksubdir(name: String, creator: Long): TxRemoteFile
+    public fun mksubdir(name: String, creator: Long): MockServerRemoteFile
 
     public var fileInfo: TxRemoteFileInfo
 }

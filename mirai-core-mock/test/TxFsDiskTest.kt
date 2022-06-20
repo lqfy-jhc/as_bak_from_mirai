@@ -11,7 +11,7 @@ package net.mamoe.mirai.mock.test
 
 import com.google.common.jimfs.Configuration
 import com.google.common.jimfs.Jimfs
-import net.mamoe.mirai.mock.txfs.TxFileDisk
+import net.mamoe.mirai.mock.resserver.MockServerFileDisk
 import net.mamoe.mirai.utils.ExternalResource.Companion.toExternalResource
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
@@ -23,7 +23,7 @@ import kotlin.test.assertTrue
 
 internal class TxFsDiskTest {
     val tmpfs = Jimfs.newFileSystem(Configuration.unix())
-    val disk = TxFileDisk.newFileDisk(tmpfs.getPath("/disk"))
+    val disk = MockServerFileDisk.newFileDisk(tmpfs.getPath("/disk"))
     private fun splitLine() = println("==================================================================")
 
     @AfterEach
