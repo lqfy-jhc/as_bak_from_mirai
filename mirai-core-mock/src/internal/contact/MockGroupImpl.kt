@@ -307,7 +307,7 @@ internal class MockGroupImpl(
         val src = newMsgSrc(true, message, time.toLong()) { ids, internalIds, time0 ->
             OnlineMsgSrcToGroup(ids, internalIds, time0, message, bot, bot, this)
         }
-        val msg = src withMessage message
+        val msg = src.withMessage(message)
         GroupMessageSyncEvent(this, msg, botAsMember, bot.nick, time).broadcast()
     }
 

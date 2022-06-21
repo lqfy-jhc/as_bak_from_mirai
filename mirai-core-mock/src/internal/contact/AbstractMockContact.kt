@@ -45,7 +45,7 @@ internal abstract class AbstractMockContact(
         val msg = broadcastMessagePreSendEvent(message, false) { _, _ -> newMessagePreSend(message) }
 
         val source = newMessageSource(msg)
-        val response = source withMessage msg
+        val response = source.withMessage(msg)
 
         bot.logger.verbose("$this <- $msg".replaceMagicCodes())
 

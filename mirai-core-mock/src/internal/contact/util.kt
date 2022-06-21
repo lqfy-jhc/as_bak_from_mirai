@@ -36,7 +36,7 @@ internal fun Member.requireBotPermissionHigherThanThis(msg: String) {
     throw PermissionDeniedException("bot current permission ${group.botPermission} can't modify $id($permission), $msg")
 }
 
-internal infix fun MessageSource.withMessage(msg: Message): MessageChain = buildMessageChain {
+internal fun MessageSource.withMessage(msg: Message): MessageChain = buildMessageChain {
     add(this@withMessage)
     if (msg is MessageChain) {
         msg.forEach { sub ->

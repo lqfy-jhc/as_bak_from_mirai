@@ -198,7 +198,7 @@ internal class MockNormalMemberImpl(
             mockApi.lastSpeakTimestamp = time
             OnlineMsgSrcFromGroup(ids, internalIds, time, message, bot, this)
         }
-        val msg = src withMessage message
+        val msg = src.withMessage(message)
         GroupMessageEvent(nameCardOrNick, permission, this, msg, src.time).broadcast()
         return msg
     }
