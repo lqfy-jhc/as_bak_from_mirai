@@ -13,12 +13,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.NormalMember
+import net.mamoe.mirai.contact.PermissionDeniedException
 import net.mamoe.mirai.contact.announcement.Announcement
 import net.mamoe.mirai.contact.announcement.AnnouncementImage
 import net.mamoe.mirai.contact.announcement.OnlineAnnouncement
+import net.mamoe.mirai.contact.isOperator
 import net.mamoe.mirai.event.events.GroupEntranceAnnouncementChangeEvent
 import net.mamoe.mirai.mock.contact.announcement.MockAnnouncements
 import net.mamoe.mirai.mock.contact.announcement.MockOnlineAnnouncement
+import net.mamoe.mirai.mock.contact.announcement.copy
 import net.mamoe.mirai.mock.utils.broadcastBlocking
 import net.mamoe.mirai.utils.ExternalResource
 import net.mamoe.mirai.utils.currentTimeSeconds
@@ -40,6 +43,7 @@ internal class MockAnnouncementsImpl(
 
     override suspend fun get(fid: String): OnlineAnnouncement? = announcements[fid]
 
+    @Suppress("MemberVisibilityCanBePrivate")
     internal fun putDirect(announcement: MockOnlineAnnouncement) {
         val annoc = if (announcement.fid.isEmpty()) {
             announcement.copy(fid = UUID.randomUUID().toString())
@@ -51,7 +55,7 @@ internal class MockAnnouncementsImpl(
         annoc.group = group
     }
 
-    override fun publish0(announcement: Announcement, actor: NormalMember): OnlineAnnouncement {
+    override fun publish0(announcement: Announcement, actor: NormalMember, events: Boolean): OnlineAnnouncement {
         val old = if (announcement.parameters.sendToNewMember)
             announcements.elements().toList().firstOrNull { oa -> oa.parameters.sendToNewMember }
         else null
@@ -65,18 +69,25 @@ internal class MockAnnouncementsImpl(
             publicationTime = currentTimeSeconds()
         )
         putDirect(onac)
+        if (!events) return onac
+
+        @Suppress("DEPRECATION")
         GroupEntranceAnnouncementChangeEvent(
-            old?.content ?: "",
-            announcement.content,
-            group,
-            actor
+            origin = old?.content.orEmpty(),
+            new = onac.content,
+            group = group,
+            operator = actor.takeUnless { it.id == group.bot.id }
         ).broadcastBlocking()
+
+        // TODO: mirai-core no other events about announcements
         return onac
     }
 
     override suspend fun publish(announcement: Announcement): OnlineAnnouncement {
-        // TODO: CheckPermission
-        return publish0(announcement, this.group.botAsMember)
+        if (!group.botPermission.isOperator()) {
+            throw PermissionDeniedException("Failed to publish a new announcement because bot don't have admin permission to perform it.")
+        }
+        return publish0(announcement, this.group.botAsMember, true)
     }
 
     override suspend fun uploadImage(resource: ExternalResource): AnnouncementImage = resource.inResource {

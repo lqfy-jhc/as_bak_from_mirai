@@ -11,17 +11,32 @@ package net.mamoe.mirai.mock.contact.announcement
 
 import net.mamoe.mirai.contact.Group
 import net.mamoe.mirai.contact.NormalMember
-import net.mamoe.mirai.contact.announcement.Announcement
-import net.mamoe.mirai.contact.announcement.AnnouncementParameters
-import net.mamoe.mirai.contact.announcement.Announcements
-import net.mamoe.mirai.contact.announcement.OnlineAnnouncement
+import net.mamoe.mirai.contact.announcement.*
+import net.mamoe.mirai.mock.MockBotDSL
 import net.mamoe.mirai.utils.MiraiInternalApi
 
 public interface MockAnnouncements : Announcements {
-    public fun publish0(announcement: Announcement, actor: NormalMember): OnlineAnnouncement
+    /**
+     * 直接以 [actor] 的身份推送一则公告
+     *
+     * @param events 当为 `true` 时会广播相关事件
+     * @param announcement 见 [OfflineAnnouncement], [OfflineAnnouncement.create]
+     */
+    @MockBotDSL
+    public fun publish0(
+        announcement: Announcement,
+        actor: NormalMember,
+        events: Boolean
+    ): OnlineAnnouncement
+
+    @MockBotDSL
+    public fun publish0(
+        announcement: Announcement,
+        actor: NormalMember,
+    ): OnlineAnnouncement = publish0(announcement, actor, false)
 }
 
-public data class MockOnlineAnnouncement @MiraiInternalApi public constructor(
+public class MockOnlineAnnouncement @MiraiInternalApi public constructor(
     override val content: String,
     override val parameters: AnnouncementParameters,
     override val senderId: Long,
@@ -34,3 +49,21 @@ public data class MockOnlineAnnouncement @MiraiInternalApi public constructor(
     override lateinit var group: Group
     override val sender: NormalMember? get() = group[senderId]
 }
+
+internal fun MockOnlineAnnouncement.copy(
+    content: String = this.content,
+    parameters: AnnouncementParameters = this.parameters,
+    senderId: Long = this.senderId,
+    fid: String = this.fid,
+    allConfirmed: Boolean = this.allConfirmed,
+    confirmedMembersCount: Int = this.confirmedMembersCount,
+    publicationTime: Long = this.publicationTime,
+): MockOnlineAnnouncement = MockOnlineAnnouncement(
+    content = content,
+    parameters = parameters,
+    senderId = senderId,
+    fid = fid,
+    allConfirmed = allConfirmed,
+    confirmedMembersCount = confirmedMembersCount,
+    publicationTime = publicationTime,
+)
