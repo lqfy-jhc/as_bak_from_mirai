@@ -21,12 +21,12 @@ import kotlin.contracts.contract
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 internal open class MockBotTestBase : TestBase() {
     internal val bot = MockBotFactory.newMockBotBuilder()
-        .id(3259866114)
+        .id((100000000L..321111111L).random())
         .nick("Kafusumi")
         .create()
 
     @AfterEach
-    internal fun `$$bot_release`() {
+    internal fun `$$bot dispose`() {
         bot.close()
     }
 
