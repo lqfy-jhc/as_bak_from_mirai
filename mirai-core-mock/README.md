@@ -10,16 +10,17 @@ mirai 模拟环境测试框架
 
 ## 环境准备
 
-您需要先添加 `net.mamoe:mirai-core-mock` 依赖,
-并在启动前运行以下的代码
+需要先添加 `net.mamoe:mirai-core-mock` 依赖
 
 ```kotlin
-// build.gradle(.kts)
 depencencies {
     testApi("net.mamoe:mirai-core-mock:$VERSION")
 }
+```
 
-// Test Code Main
+并在启动前运行以下的代码
+
+```kotlin
 internal fun main() {
     MockBotFactory.initialize()
     // .....

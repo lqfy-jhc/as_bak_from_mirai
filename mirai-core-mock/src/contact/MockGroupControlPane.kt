@@ -36,5 +36,8 @@ public interface MockGroupControlPane {
 
     public var groupName: String
 
+    /**
+     * 通过 [withActor] 得到的 [MockGroupControlPane] 在修改属性的同时会广播相关事件
+     */
     public fun withActor(actor: MockNormalMember): MockGroupControlPane
 }
