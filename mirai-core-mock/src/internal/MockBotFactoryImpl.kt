@@ -37,7 +37,7 @@ internal class MockBotFactoryImpl : MockBotFactory {
                 MessageDatabase.newDefaultDatabase()
             }
             var userProfileService: UserProfileService by lateinitMutableProperty {
-                UserProfileService.newDefaultInstance()
+                UserProfileService.getInstance()
             }
 
             override fun id(value: Long): MockBotFactory.BotBuilder = apply {

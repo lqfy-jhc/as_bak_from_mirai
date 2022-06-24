@@ -43,7 +43,7 @@ public interface UserProfileService {
 
     public companion object {
         @JvmStatic
-        public fun newDefaultInstance(): UserProfileService {
+        public fun getInstance(): UserProfileService {
             return UserProfileServiceImpl()
         }
     }
