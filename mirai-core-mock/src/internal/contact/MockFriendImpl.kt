@@ -51,14 +51,40 @@ internal class MockFriendImpl(
 
         override var nick: String = nick
         override var remark: String = remark
-        override var avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
+        override var avatarUrl: String
+            get() = this@MockFriendImpl._avatarUrl
+            set(value) {
+                this@MockFriendImpl._avatarUrl = value
+                bot.groups.forEach { g ->
+                    val mems = if (this@MockFriendImpl.id == bot.id) {
+                        sequenceOf(g.botAsMember)
+                    } else g.members.asSequence().filter {
+                        it.id == this@MockFriendImpl.id
+                    }
+                    mems.forEach { m ->
+                        m.cast<MockNormalMemberImpl>().avatarUrl = value
+                    }
+                }
+                if (this@MockFriendImpl.id == bot.id) {
+                    sequenceOf(bot.asStranger)
+                } else {
+                    bot.strangers.asSequence().filter { s ->
+                        s.id == this@MockFriendImpl.id
+                    }
+                }.forEach { it.cast<MockStrangerImpl>().avatarUrl = value }
+            }
     }
-    override var avatarUrl: String
-        get() = mockApi.avatarUrl
-        set(value) {
-            mockApi.avatarUrl = value
-            FriendAvatarChangedEvent(this).broadcastBlocking()
-        }
+
+    private var _avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
+    override val avatarUrl: String get() = _avatarUrl
+    internal fun initAvatarUrl(v: String) {
+        _avatarUrl = v
+    }
+
+    override fun changeAvatarUrl(newAvatar: String) {
+        mockApi.avatarUrl = newAvatar
+        FriendAvatarChangedEvent(this).broadcastBlocking()
+    }
 
     override fun avatarUrl(spec: AvatarSpec): String {
         return avatarUrl

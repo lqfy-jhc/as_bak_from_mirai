@@ -67,17 +67,10 @@ internal class MockBotImpl(
             BotNickChangedEvent(this, ov, value).broadcastBlocking()
         }
 
-    override var avatarUrl: String = ""
-        get() {
-            val f = field
-            if (f.isEmpty()) {
-                @Suppress("QUALIFIED_SUPERTYPE_EXTENDED_BY_OTHER_SUPERTYPE", "RemoveExplicitSuperQualifier")
-                return super<ContactOrBot>.avatarUrl(spec = AvatarSpec.LARGEST)
-            }
-            return f
-        }
+    override var avatarUrl: String
+        get() = asFriend.avatarUrl
         set(value) {
-            field = value
+            asFriend.mockApi.avatarUrl = value
             BotAvatarChangedEvent(this).broadcastBlocking()
         }
 
@@ -163,7 +156,10 @@ internal class MockBotImpl(
         GlobalEventChannel.filterIsInstance<BotEvent>().filter { it.bot === this@MockBotImpl }
 
     override val asFriend: MockFriend by lazy {
-        MockFriendImpl(coroutineContext, this, id, nick, "")
+        MockFriendImpl(coroutineContext, this, id, nick, "").also { basm ->
+            @Suppress("QUALIFIED_SUPERTYPE_EXTENDED_BY_OTHER_SUPERTYPE", "RemoveExplicitSuperQualifier")
+            basm.initAvatarUrl(super<ContactOrBot>.avatarUrl(spec = AvatarSpec.LARGEST))
+        }
     }
     override val asStranger: MockStranger by lazy {
         MockStrangerImpl(coroutineContext, this, id, "", nick)

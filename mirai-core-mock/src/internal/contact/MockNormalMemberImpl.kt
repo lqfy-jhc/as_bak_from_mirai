@@ -59,6 +59,11 @@ internal class MockNormalMemberImpl(
         return avatarUrl
     }
 
+    override fun changeAvatarUrl(newAvatar: String) {
+        bot.getFriend(id)?.let { return it.changeAvatarUrl(newAvatar) }
+        this.avatarUrl = newAvatar
+    }
+
     private inline fun <T> crossFriendAccess(
         ifExists: (MockFriend) -> T,
         ifNotExists: () -> T,
@@ -88,6 +93,15 @@ internal class MockNormalMemberImpl(
         override var permission: MemberPermission = permission
         override var nameCard: String = nameCard
         override var specialTitle: String = specialTitle
+        override var avatarUrl: String
+            get() = this@MockNormalMemberImpl.avatarUrl
+            set(value) {
+                this@MockNormalMemberImpl.avatarUrl = value
+
+                bot.getFriend(this@MockNormalMemberImpl.id)?.let { f ->
+                    f.mockApi.avatarUrl = value
+                }
+            }
     }
 
     override val permission: MemberPermission

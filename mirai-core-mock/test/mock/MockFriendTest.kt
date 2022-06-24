@@ -67,7 +67,7 @@ internal class MockFriendTest : MockBotTestBase() {
     @Test
     fun testFriendAvatarChangedEvent() = runTest {
         runAndReceiveEventBroadcast {
-            bot.addFriend(111, "a").avatarUrl = MockImage.random(bot).getUrl(bot)
+            bot.addFriend(111, "a").changeAvatarUrl(MockImage.random(bot).getUrl(bot))
             bot.addFriend(222, "b")
         }.let { events ->
             assertIsInstance<FriendAvatarChangedEvent>(events[0])

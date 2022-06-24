@@ -43,8 +43,6 @@ internal class MockAnonymousMemberImpl(
         throw AssertionError()
     }
 
-    // TODO
-    override var avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
     override fun avatarUrl(spec: AvatarSpec): String {
         return avatarUrl
     }
@@ -96,6 +94,13 @@ internal class MockAnonymousMemberImpl(
         override var permission: MemberPermission
             get() = MemberPermission.MEMBER
             set(_) {}
+        override var avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
+    }
+
+    // TODO
+    override val avatarUrl: String by mockApi::avatarUrl
+    override fun changeAvatarUrl(newAvatar: String) {
+        mockApi.avatarUrl = newAvatar
     }
 
 

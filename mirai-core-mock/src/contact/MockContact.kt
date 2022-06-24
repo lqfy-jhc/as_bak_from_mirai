@@ -11,9 +11,23 @@ package net.mamoe.mirai.mock.contact
 
 import me.him188.kotlin.jvm.blocking.bridge.JvmBlockingBridge
 import net.mamoe.mirai.contact.Contact
+import net.mamoe.mirai.mock.MockBotDSL
 
 @JvmBlockingBridge
 public interface MockContact : Contact, MockContactOrBot {
-    // override for modifiable
-    override var avatarUrl: String
+    public interface MockApi {
+        public var avatarUrl: String
+    }
+
+    /**
+     * 获取直接修改字段内容的 API, 通过该 API 修改的值都不会触发广播
+     */
+    @MockBotDSL
+    public val mockApi: MockApi
+
+    /**
+     * 修改 [avatarUrl] 的地址, 同时会广播相关事件 (如果有)
+     */
+    @MockBotDSL
+    public fun changeAvatarUrl(newAvatar: String)
 }

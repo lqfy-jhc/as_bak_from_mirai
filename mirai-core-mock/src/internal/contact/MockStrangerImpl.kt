@@ -42,6 +42,16 @@ internal class MockStrangerImpl(
         override val contact: MockStranger get() = this@MockStrangerImpl
         override var nick: String = nick
         override var remark: String = remark
+        override var avatarUrl: String
+            get() = this@MockStrangerImpl.avatarUrl
+            set(value) {
+                this@MockStrangerImpl.avatarUrl = value
+
+                bot.getFriend(this@MockStrangerImpl.id)?.let { f ->
+                    f.mockApi.avatarUrl = value
+                    return
+                }
+            }
     }
     override var avatarUrl: String by lateinitMutableProperty {
         bot.getFriend(id)?.let { return@lateinitMutableProperty it.avatarUrl }
@@ -50,6 +60,11 @@ internal class MockStrangerImpl(
 
     override fun avatarUrl(spec: AvatarSpec): String {
         return avatarUrl
+    }
+
+    override fun changeAvatarUrl(newAvatar: String) {
+        this.avatarUrl = newAvatar
+        bot.getFriend(id)?.let { return it.changeAvatarUrl(newAvatar) }
     }
 
     override val nick: String

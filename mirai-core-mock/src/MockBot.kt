@@ -61,6 +61,7 @@ public interface MockBot : Bot, MockContactOrBot, MockUserOrBot {
     /**
      * Bot 头像, 可自定义, 修改时会广播 [BotAvatarChangedEvent]
      */
+    @set:MockBotDSL
     override var avatarUrl: String
 
     /// Contract API override

@@ -20,18 +20,18 @@ import kotlin.random.Random
 
 @JvmBlockingBridge
 public interface MockFriend : Friend, MockContact, MockUser, MockMsgSyncSupport {
-    public interface MockApi {
+    public interface MockApi : MockContact.MockApi {
         public val contact: MockFriend
         public var nick: String
         public var remark: String
-        public var avatarUrl: String
+        public override var avatarUrl: String
     }
 
     /**
      * 获取直接修改字段内容的 API, 通过该 API 修改的值都不会触发广播
      */
     @MockBotDSL
-    public val mockApi: MockApi
+    public override val mockApi: MockApi
 
     /**
      * 修改 nick 同时广播相关事件

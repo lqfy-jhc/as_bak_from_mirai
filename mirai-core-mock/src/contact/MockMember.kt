@@ -16,7 +16,7 @@ import net.mamoe.mirai.mock.MockBotDSL
 
 @JvmBlockingBridge
 public interface MockMember : Member, MockContact, MockUser {
-    public interface MockApi {
+    public interface MockApi : MockContact.MockApi {
         public val member: MockMember
         public var nick: String
         public var remark: String
@@ -29,5 +29,5 @@ public interface MockMember : Member, MockContact, MockUser {
      * 获取直接修改字段内容的 API, 通过该 API 修改的值都不会触发广播
      */
     @MockBotDSL
-    public val mockApi: MockApi
+    public override val mockApi: MockApi
 }

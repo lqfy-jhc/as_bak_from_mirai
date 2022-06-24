@@ -38,8 +38,14 @@ public interface MockGroup : Group, MockContact, MockMsgSyncSupport {
     override val members: ContactList<MockNormalMember>
     override val owner: MockNormalMember
     override val botAsMember: MockNormalMember
-    override var avatarUrl: String
+    override val avatarUrl: String
     override val announcements: MockAnnouncements
+
+    public interface MockApi : MockContact.MockApi {
+        override var avatarUrl: String
+    }
+
+    override val mockApi: MockApi
 
     /**
      * 群荣耀, 可直接修改此属性, 修改此属性不会广播相关事件

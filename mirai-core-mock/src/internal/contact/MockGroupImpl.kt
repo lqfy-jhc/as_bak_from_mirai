@@ -50,7 +50,6 @@ internal class MockGroupImpl(
     override val honorMembers: MutableMap<GroupHonorType, MockNormalMember> = EnumMap(GroupHonorType::class.java)
     private val txFileSystem by lazy { bot.mock().tmpResourceServer.mockServerFileDisk.newFsSystem() }
 
-    override var avatarUrl: String by lateinitMutableProperty { runBlocking { MockImage.random(bot).getUrl(bot) } }
     override fun avatarUrl(spec: AvatarSpec): String {
         return avatarUrl
     }
@@ -224,6 +223,18 @@ internal class MockGroupImpl(
             checkBotPermission(MemberPermission.ADMINISTRATOR)
             controlPane.withActor(botAsMember).groupName = value
         }
+
+    override val mockApi: MockGroup.MockApi = object : MockGroup.MockApi {
+        override var avatarUrl: String by lateinitMutableProperty {
+            runBlocking { MockImage.random(bot).getUrl(bot) }
+        }
+    }
+
+    override fun changeAvatarUrl(newAvatar: String) {
+        mockApi.avatarUrl = newAvatar
+    }
+
+    override val avatarUrl: String by mockApi::avatarUrl
 
     override lateinit var owner: MockNormalMember
     override lateinit var botAsMember: MockNormalMember
